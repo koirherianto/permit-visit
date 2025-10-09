@@ -27,7 +27,6 @@ export const actions = {
     try {
       const response = await fetch(`${apiUrl}/permit-visits/${token}`);
 
-      console.log('Response status:', response.status);
       if (response.status === 404) {
         // Token tidak ditemukan
         return fail(404, { error: 'Token tidak ditemukan. Periksa kembali token Anda.' });
@@ -38,11 +37,14 @@ export const actions = {
         return fail(500, { error: 'Gagal menghubungi server. Coba lagi nanti.' });
       }
 
-      // Kalau sukses, redirect ke halaman progres
-      throw redirect(302, `/token/${token}`);
+      const data = await response.json();
+      console.log(data.data, data.data.guests, data.data.approvals);
+
     } catch (err) {
       console.error('Error fetch token:', err);
       return fail(500, { error: 'Terjadi kesalahan server internal.' });
     }
+
+    throw redirect(302, `/token/${token}`);
   },
 } satisfies Actions;
