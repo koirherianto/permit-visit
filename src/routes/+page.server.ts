@@ -1,6 +1,6 @@
 import type { Actions } from './$types';
 import { fail, redirect } from '@sveltejs/kit';
-import { env } from '$env/dynamic/public';
+import { PUBLIC_API_URL, PUBLIC_CC } from '$env/static/public';
 
 // import type { PageServerLoad } from './$types';
 
@@ -9,16 +9,16 @@ import { env } from '$env/dynamic/public';
 export const actions = {
 	permitVisitSave: async ({ request, fetch }) => {
 		// TODO log the user in
-        const formData = await request.formData();
-        console.log(formData)
+		const formData = await request.formData();
+		console.log(formData)
 
-        const apiUrl = env.PUBLIC_API_URL;
+		const apiUrl = PUBLIC_API_URL;
 		console.log('API URL:', apiUrl);
 
 		let beResponse = null;
 
-        try {
-			const response = await fetch(apiUrl +'/permit-visits', {
+		try {
+			const response = await fetch(apiUrl + '/permit-visits', {
 				method: 'POST',
 				body: formData,
 			});
@@ -33,13 +33,13 @@ export const actions = {
 			console.log('✅ Laravel response:', laravelResponse.data);
 			beResponse = laravelResponse.data;
 			// return { success: true, data };
-			
+
 		} catch (err) {
 			console.error('Fetch error:', err);
 			return fail(500, { message: 'Internal server error', error: err });
 		}
 
-		
+
 		redirect(302, '/token?token=' + beResponse.token);
 	},
 } satisfies Actions;

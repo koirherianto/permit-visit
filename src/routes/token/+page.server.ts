@@ -1,15 +1,16 @@
 import type { Actions } from './$types';
 import { fail, redirect } from '@sveltejs/kit';
 import { env } from '$env/dynamic/public';
+import { PUBLIC_API_URL, PUBLIC_CC } from '$env/static/public';
 
 import type { PageServerLoad } from './$types';
 
 export const load: PageServerLoad = async ({ url }) => {
-    const tokenBaru = url.searchParams.get('token');
+  const tokenBaru = url.searchParams.get('token');
 
-    return { 
-        tokenBaru: tokenBaru 
-    };
+  return {
+    tokenBaru: tokenBaru
+  };
 };
 
 
@@ -22,7 +23,7 @@ export const actions = {
       return fail(400, { error: 'Token wajib diisi.' });
     }
 
-    const apiUrl = env.PUBLIC_API_URL;
+    const apiUrl = PUBLIC_API_URL;
 
     try {
       const response = await fetch(`${apiUrl}/permit-visits/${token}`);

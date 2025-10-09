@@ -1,8 +1,8 @@
-import { env } from '$env/dynamic/public';
+import { PUBLIC_CC } from '$env/static/public';
 import type { LayoutServerLoad } from './$types';
 
 export const load: LayoutServerLoad = async () => {
-    if (env.PUBLIC_CC === 'CFK') {
+    if (PUBLIC_CC === 'CFK') {
         return {
             companyName: 'PT Cahaya Fajar Kaltim',
             logoCompany: '/cfk-logo.png',

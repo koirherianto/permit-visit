@@ -1,9 +1,9 @@
 import type { PageServerLoad } from './$types';
 import { error } from '@sveltejs/kit';
-import { env } from '$env/dynamic/public';
+import { PUBLIC_API_URL, PUBLIC_CC } from '$env/static/public';
 
 export const load: PageServerLoad = async ({ params, fetch }) => {
-  const apiUrl = env.PUBLIC_API_URL;
+  const apiUrl = PUBLIC_API_URL;
   const token = params.token;
 
   try {
