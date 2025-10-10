@@ -7,7 +7,7 @@
 </script>
 
 <svelte:head>
-  <link rel="icon" href={favicon} />
+  <link rel="icon" href={data.favicon} type="image/svg+xml" />
 </svelte:head>
 
 <div class="min-h-screen flex flex-col bg-gradient-to-b from-white to-slate-50">
@@ -21,14 +21,16 @@
         <span class="font-semibold text-slate-800">{data.companyName}</span>
       </div>
       <nav class="hidden md:flex items-center gap-6 text-sm text-slate-600">
-        <a href="/token" class="hover:text-slate-900">Cari Token</a>
+        <a href="/token" class="hover:text-slate-900"
+          >Periksa Pengajuan Kunjungan Tamu</a
+        >
       </nav>
     </div>
   </header>
   {@render children?.()}
 
   <footer class="py-6 text-center text-sm text-slate-500">
-    © 2003 - {new Date().getFullYear()}
+    © 2024 - {new Date().getFullYear()}
     {data.companyName}
   </footer>
 </div>

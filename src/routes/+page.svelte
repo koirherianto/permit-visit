@@ -25,12 +25,18 @@
 <!-- HERO (brand CFK: oranye → merah) -->
 <!-- HERO -->
 <section class="relative overflow-hidden">
-  <!-- background gradient -->
-  <div class={`absolute inset-0 bg-gradient-to-r ${data.brandGradient}`}></div>
-
-  <!-- pattern halus -->
+  <!-- background image -->
   <div
-    class="absolute inset-0 opacity-15 mix-blend-overlay pointer-events-none"
+    class="absolute inset-0 bg-cover bg-center"
+    style="background-image: url('/landingpage-cfk-compress.jpg');"
+  ></div>
+
+  <!-- overlay gelap transparan agar teks tetap terbaca -->
+  <div class="absolute inset-0 bg-black/40"></div>
+
+  <!-- pattern halus di atasnya -->
+  <div
+    class="absolute inset-0 opacity-20 mix-blend-overlay pointer-events-none"
     style="background-image: radial-gradient(circle at 20% 30%, white 0%, transparent 35%),
                                 radial-gradient(circle at 80% 70%, white 0%, transparent 35%);"
   ></div>
