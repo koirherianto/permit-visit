@@ -7,39 +7,40 @@ import { PUBLIC_API_URL, PUBLIC_CC } from '$env/static/public';
 // export const load: PageServerLoad = async () => {};
 
 export const actions = {
-	permitVisitSave: async ({ request, fetch }) => {
-		// TODO log the user in
-		const formData = await request.formData();
-		console.log(formData)
+  permitVisitSave: async ({ request, fetch }) => {
+    const formData = await request.formData();
 
-		const apiUrl = PUBLIC_API_URL;
-		console.log('API URL:', apiUrl);
+    // 🔧 Pastikan tanggal_kunjungan aman dari format 12 jam
+    const tanggalKunjungan = formData.get('tanggal_kunjungan');
 
-		let beResponse = null;
+	if (typeof tanggalKunjungan === 'string' && tanggalKunjungan) {
+		const d = new Date(tanggalKunjungan);
+		const isoLocal = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}T${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`;
+		formData.set('tanggal_kunjungan', isoLocal);
+	}
 
-		try {
-			const response = await fetch(apiUrl + '/permit-visits', {
-				method: 'POST',
-				body: formData,
-			});
+    const apiUrl = PUBLIC_API_URL;
+	let laravelResponse;
 
-			if (!response.ok) {
-				const errorText = await response.text();
-				console.error('Error:', errorText);
-				return fail(400, { message: 'Gagal kirim ke API Laravel', error: errorText });
-			}
+    try {
+      const response = await fetch(apiUrl + '/permit-visits', {
+        method: 'POST',
+        body: formData,
+      });
 
-			const laravelResponse = await response.json();
-			console.log('✅ Laravel response:', laravelResponse.data);
-			beResponse = laravelResponse.data;
-			// return { success: true, data };
+	  
+      if (!response.ok) {
+		const errorText = await response.text();
+		console.error('Error:', errorText);
+		return fail(400, { message: 'Gagal kirim ke API Laravel', error: errorText });
+	  }
+		
+		laravelResponse = await response.json();
+    } catch (err) {
+      console.error('Fetch error:', err);
+      return fail(500, { message: 'Internal server error', error: err });
+    }
 
-		} catch (err) {
-			console.error('Fetch error:', err);
-			return fail(500, { message: 'Internal server error', error: err });
-		}
-
-
-		redirect(302, '/token?token=' + beResponse.token);
-	},
-} satisfies Actions;
+	return redirect(302, '/token?token=' + laravelResponse.data.token);
+  },
+};
