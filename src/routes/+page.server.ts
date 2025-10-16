@@ -10,6 +10,12 @@ export const actions = {
   permitVisitSave: async ({ request, fetch }) => {
     const formData = await request.formData();
 
+    // log all
+    console.log('log semua data');
+    formData.forEach((value, key) => {
+      console.log(key, value);
+    });
+
     // 🔧 Pastikan tanggal_kunjungan aman dari format 12 jam
     const tanggalKunjungan = formData.get('tanggal_kunjungan');
 
