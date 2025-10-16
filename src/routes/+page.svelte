@@ -69,6 +69,12 @@
   <Card class="max-w-3xl mx-auto shadow-sm">
     <CardHeader>
       <CardTitle>Daftar Kunjungan</CardTitle>
+      <p class="text-sm text-muted-foreground mt-1">
+        Proses Pengajuan membutuhkan persetujuan dari atasan terkait.<br />
+
+        Disarankan untuk melakukan pengajuan kunjungan minimal 1 minggu sebelum
+        tanggal kunjungan.<br />
+      </p>
     </CardHeader>
     <CardContent>
       <!-- Dummy UI only -->
