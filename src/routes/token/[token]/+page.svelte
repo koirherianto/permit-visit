@@ -11,24 +11,7 @@
 
   let { data }: PageProps = $props();
 
-  const { permit, guests, approvals, pendisposisi } = data;
-
-  // 🌿 transform ke bentuk timeline
-  const steps = [
-    { label: "Diajukan oleh " + permit.nama_pic, done: true },
-    { label: "Disetujui oleh HSE", done: approvals.length >= 1 },
-    { label: "Disetujui oleh GA", done: approvals.length >= 2 },
-    { label: "Disetujui oleh Security", done: approvals.length >= 3 },
-  ];
-
-  const status =
-    approvals.length === 0
-      ? "Menunggu Approval HSE"
-      : approvals.length === 1
-        ? "Menunggu Approval GA"
-        : approvals.length === 2
-          ? "Menunggu Approval Security"
-          : "Sudah Disetujui Semua";
+  const { permit, guests, pendisposisi } = data;
 </script>
 
 <main class="container mx-auto px-4 py-12">
@@ -42,7 +25,6 @@
       <section class="space-y-1">
         <p><strong>Instansi:</strong> {permit.instansi}</p>
         <p><strong>Agenda:</strong> {permit.agenda}</p>
-        <p><strong>Status:</strong> {status}</p>
         <p><strong>Token:</strong> {permit.token}</p>
         <p><strong>Nama PIC:</strong> {permit.nama_pic}</p>
         <p>

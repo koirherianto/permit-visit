@@ -22,7 +22,6 @@ export const load: PageServerLoad = async ({ params, fetch }) => {
 
     console.log('✅ Permit visit:', permit);
     console.log('👥 Guests:', permit.guests);
-    console.log('📝 Approvals:', permit.approvals);
 
     return {
       permit,
