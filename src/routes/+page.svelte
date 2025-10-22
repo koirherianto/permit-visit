@@ -118,7 +118,7 @@
         <div class="grid md:grid-cols-2 gap-4">
           <div class="grid gap-2">
             <Label for="nama_pic"
-              >Nama PIC <span class="text-red-500">*</span></Label
+              >Nama PIC Pengunjung <span class="text-red-500">*</span></Label
             >
             <Input
               id="nama_pic"
@@ -130,7 +130,7 @@
           </div>
           <div class="grid gap-2">
             <Label for="no_hp_pic"
-              >WhatsApp PIC (Token Notifikasi akan dikirim) <span
+              >WhatApp PIC Pengunjung (Pengiriman Notifikasi) <span
                 class="text-red-500">*</span
               ></Label
             >
@@ -177,7 +177,9 @@
 
         <!-- Keterangan -->
         <div class="grid gap-2">
-          <Label for="keterangan_tambahan">Keterangan Tambahan</Label>
+          <Label for="keterangan_tambahan"
+            >Departemen/Nama yang ingin ditemui (opsional)</Label
+          >
           <Textarea
             id="keterangan_tambahan"
             name="keterangan_tambahan"
