@@ -1,4 +1,5 @@
 <script lang="ts">
+  import type { PageProps } from "./$types";
   import {
     Card,
     CardHeader,
@@ -9,6 +10,8 @@
   import { Input } from "$lib/components/ui/input/index.js";
   import { Label } from "$lib/components/ui/label/index.js";
 
+  let { data }: PageProps = $props();
+
   // Svelte 5 runes
   let namaPemohon = $state("");
   let instansiPemohon = $state("");
@@ -16,18 +19,7 @@
   let tanggalDiinginkan = $state(""); // type="date"
 
   // Nomor WA PIC tujuan (tetap)
-  const PHONE_TARGET = "082333119622";
-
-  function formatTanggalID(value: string): string {
-    if (!value) return "[tanggal yang diinginkan]";
-    const d = new Date(value);
-    if (isNaN(d.getTime())) return "[tanggal yang diinginkan]";
-    return new Intl.DateTimeFormat("id-ID", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-    }).format(d);
-  }
+  const PHONE_TARGET = data.nomerHrd;
 
   function buildWhatsAppUrl() {
     // Buang karakter non-digit
@@ -42,7 +34,7 @@
       `Keperluan: ${keperluanPemohon || "[Keperluan]"}`,
       `Pada Tanggal: ${tanggalDiinginkan || "[Tanggal]"}`,
       "",
-      "Mohon konfirmasi ketersediaan waktunya. Terima kasih.",
+      "Pesan ini dibuat dari formulir visit kunjungan online, pengguna tidak memiliki surat resmi ataupun janji.",
     ].join("\n");
 
     return `${base}?text=${encodeURIComponent(text)}`;
