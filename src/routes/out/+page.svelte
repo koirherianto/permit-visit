@@ -10,25 +10,41 @@
   import { Label } from "$lib/components/ui/label/index.js";
 
   // Svelte 5 runes
-  let picName = $state("");
-  let jabatan = $state("");
-  let phone = $state(""); // nomor WA tujuan (opsional). Jika kosong, pakai wa.me tanpa nomor
-  let agenda = $state("");
+  let namaPemohon = $state("");
+  let instansiPemohon = $state("");
+  let keperluanPemohon = $state("");
+  let tanggalDiinginkan = $state(""); // type="date"
+
+  // Nomor WA PIC tujuan (tetap)
+  const PHONE_TARGET = "082333119622";
+
+  function formatTanggalID(value: string): string {
+    if (!value) return "[tanggal yang diinginkan]";
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return "[tanggal yang diinginkan]";
+    return new Intl.DateTimeFormat("id-ID", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    }).format(d);
+  }
 
   function buildWhatsAppUrl() {
-    const to = (phone || "").replace(/\D/g, ""); // sanitize
+    // Buang karakter non-digit
+    const to = PHONE_TARGET.replace(/\D/g, "");
+    const base = `https://wa.me/${to}`;
+
     const text = [
       "Halo, saya ingin membuat janji kunjungan.",
       "",
-      `Keperluan: ${agenda || "[tulis keperluan]"}`,
-      `PIC tujuan: ${picName || "[nama PIC]"}`,
-      `Jabatan/Bagian: ${jabatan || "[jabatan/bagian]"}`,
-      `Waktu yang diinginkan: [tanggal & jam]`,
+      `Nama Pemohon: ${namaPemohon || "[Nama Pemohon]"}`,
+      `Perusahaan/Instansi: ${instansiPemohon || "[Perusahaan/Instansi]"}`,
+      `Keperluan: ${keperluanPemohon || "[Keperluan]"}`,
+      `Pada Tanggal: ${tanggalDiinginkan || "[Tanggal]"}`,
       "",
       "Mohon konfirmasi ketersediaan waktunya. Terima kasih.",
     ].join("\n");
 
-    const base = to ? `https://wa.me/${to}` : "https://wa.me/";
     return `${base}?text=${encodeURIComponent(text)}`;
   }
 </script>
@@ -38,7 +54,7 @@
   <h1 class="text-2xl md:text-3xl font-bold">Buat Janji Terlebih Dahulu</h1>
   <p class="text-muted-foreground mt-2">
     Untuk melanjutkan pengajuan kunjungan, Anda perlu memiliki janji terlebih
-    dahulu dengan PIC terkait (via telpon atau pesan).
+    dahulu dengan HRD.
   </p>
 </section>
 
@@ -50,20 +66,20 @@
     <CardContent class="grid gap-6">
       <div class="grid md:grid-cols-2 gap-4">
         <div class="grid gap-2">
-          <Label for="picName">Nama PIC</Label>
+          <Label for="namaPemohon">Nama Pemohon</Label>
           <Input
-            id="picName"
-            bind:value={picName}
+            id="namaPemohon"
+            bind:value={namaPemohon}
             placeholder="Contoh: Bapak Andi"
             maxlength={255}
           />
         </div>
         <div class="grid gap-2">
-          <Label for="jabatan">Jabatan/Bagian/Departemen</Label>
+          <Label for="instansiPemohon">Perusahaan/Instansi Pemohon</Label>
           <Input
-            id="jabatan"
-            bind:value={jabatan}
-            placeholder="Contoh: Manager Produksi"
+            id="instansiPemohon"
+            bind:value={instansiPemohon}
+            placeholder="Contoh: PT ABC"
             maxlength={255}
           />
         </div>
@@ -71,22 +87,22 @@
 
       <div class="grid md:grid-cols-2 gap-4">
         <div class="grid gap-2">
-          <Label for="agenda">Keperluan</Label>
+          <Label for="keperluanPemohon">Keperluan Pemohon</Label>
           <Input
-            id="agenda"
-            bind:value={agenda}
-            placeholder="Contoh: Kunjungan vendor / audit"
+            id="keperluanPemohon"
+            bind:value={keperluanPemohon}
+            placeholder="Contoh: Menawarkan Jasa ..."
             maxlength={255}
           />
         </div>
         <div class="grid gap-2">
-          <Label for="phone">No. WA PIC (628xxx)</Label>
+          <Label for="tanggalDiinginkan">Pada Tanggal</Label>
           <Input
-            id="phone"
-            bind:value={phone}
-            type="tel"
-            inputmode="numeric"
-            placeholder="628xxxxxx"
+            id="tanggalDiinginkan"
+            bind:value={tanggalDiinginkan}
+            type="text"
+            inputmode="text"
+            placeholder="Contoh: 15 Agustus 2027"
             maxlength={20}
           />
         </div>
@@ -102,8 +118,8 @@
       </div>
 
       <div class="text-sm text-muted-foreground">
-        Tip: Jika belum ada nomor WA PIC, kosongkan field nomor — WhatsApp akan
-        terbuka dengan draft pesan dan Anda bisa memilih kontak secara manual.
+        Tip: Klik tombol Susun Pesan WhatsApp akan terbuka dengan draft pesan
+        dan Anda bisa memilih kontak secara manual.
       </div>
     </CardContent>
   </Card>
