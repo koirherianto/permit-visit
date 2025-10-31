@@ -150,7 +150,7 @@
 
         <!-- Data Pengunjung -->
         <div class="border-t pt-3">
-          <h3 class="font-semibold mb-2">Data Pengunjung</h3>
+          <h3 class="font-semibold mb-2">Data Nama Pengunjung</h3>
 
           <div class="grid md:grid-cols-2 gap-4 my-2">
             <div class="grid gap-2">
@@ -158,7 +158,7 @@
                 name="nama_pic"
                 id="nama_pic"
                 value={form?.old?.nama_pic}
-                placeholder="Koordinator/PIC"
+                placeholder="Nama Koordinator/PIC"
                 maxlength={255}
                 required
               />
@@ -212,7 +212,7 @@
 
           <div class="mt-4">
             <Button type="button" variant="outline" onclick={tambahTamu}
-              >+ Tambah Tamu Lainya</Button
+              >+ Tambah Tamu Lainnya</Button
             >
           </div>
         </div>
@@ -365,22 +365,22 @@
     {:else if hasOfficialLetter === false}
       <DialogHeader>
         <DialogTitle
-          >Apakah Sudah buat janji via telpon/pesan singkat?</DialogTitle
+          >Apakah sudah buat janji via telpon/pesan singkat?</DialogTitle
         >
         <DialogDescription
-          >(Isi detail di bawah ini untuk kami teruskan ke PIC terkait)</DialogDescription
+          >(Isi detail dibawah ini untuk kami teruskan ke PIC terkait)</DialogDescription
         >
       </DialogHeader>
       <!-- Step lanjutan jika TIDAK -->
       <form class="grid gap-4" onsubmit={submitTanpaSurat}>
         <div class="grid gap-2">
           <Label for="modal_nama"
-            >Nama <span class="text-red-500">*</span></Label
+            >Dengan Siapa <span class="text-red-500">*</span></Label
           >
           <Input
             id="modal_nama"
             bind:value={namaJanji}
-            placeholder="Nama PIC"
+            placeholder="Nama"
             required
             maxlength={255}
           />
