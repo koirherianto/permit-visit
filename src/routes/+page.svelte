@@ -113,9 +113,7 @@
       >
         <!-- Instansi -->
         <div class="grid gap-2">
-          <Label for="instansi"
-            >Perusahaan/Instansi <span class="text-red-500">*</span></Label
-          >
+          <Label for="instansi">Perusahaan/Instansi</Label>
           <Input
             id="instansi"
             name="instansi"
