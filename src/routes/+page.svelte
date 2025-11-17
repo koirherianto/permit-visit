@@ -33,7 +33,7 @@
 
   // ⬇️ NEW: modal & logic
   let modalOpen = $state(true); // buka modal saat halaman load
-  let hasOfficialLetter = $state<boolean | null>(null); // null = belum memilih
+  let visitType = $state<"surat" | "janji" | null>(null);
   let namaJanji = $state(""); // nama yang dihubungi via telp/pesan (dalam modal)
   let jabatanJanji = $state(""); // jabatan/bagian/dept (dalam modal)
 
@@ -41,19 +41,18 @@
   let namaInginDitemui = $state("");
   let jabatanInginDitemui = $state("");
 
-  function pilihIya() {
-    hasOfficialLetter = true;
-    modalOpen = false;
+  function pilihDenganSurat() {
+    visitType = "surat";
+    modalOpen = false; // ke form utama + upload surat
   }
 
-  function pilihTidak() {
-    hasOfficialLetter = false;
-    // tetap di modal, lanjut step form kecilnya
+  function pilihSudahJanji() {
+    visitType = "janji";
+    // tetap di modal, lanjut ke form kecil (nama & jabatan)
   }
 
-  function submitTanpaSurat(e: Event) {
+  function submitDetailJanji(e: Event) {
     e.preventDefault();
-    // isi otomatis field di form utama
     namaInginDitemui = namaJanji.trim();
     jabatanInginDitemui = jabatanJanji.trim();
     modalOpen = false;
@@ -332,7 +331,7 @@
 
         <!-- Lampiran -->
 
-        {#if hasOfficialLetter === true}
+        {#if visitType === "surat"}
           <input type="hidden" name="has_ofiicial_latter" value="1" />
           <div class="grid gap-2">
             <Label for="lampiran">
@@ -374,26 +373,28 @@
       e.preventDefault();
     }}
   >
-    {#if hasOfficialLetter === null}
+    {#if visitType === null}
       <DialogHeader>
-        <DialogTitle>Apakah Anda Memiliki Permohonan Surat Resmi?</DialogTitle>
-        <DialogDescription>(Izin Kunjungan / Surat Tugas)</DialogDescription>
+        <DialogTitle>Apakah sudah punya janji ?</DialogTitle>
+        <DialogDescription
+          >Jika tidak memiliki janji, silahkan ajukan surat resmi</DialogDescription
+        >
       </DialogHeader>
       <div class="flex gap-3 justify-end">
-        <Button variant="outline" onclick={pilihTidak}>Tidak</Button>
-        <Button onclick={pilihIya}>Iya</Button>
+        <Button variant="outline" onclick={pilihDenganSurat}>
+          Tidak, Ajukan Surat Resmi
+        </Button>
+        <Button onclick={pilihSudahJanji} class="bg-teal-600">Sudah</Button>
       </div>
-    {:else if hasOfficialLetter === false}
+    {:else if visitType === "janji"}
       <DialogHeader>
-        <DialogTitle>
-          Apakah sudah buat janji via telpon/pesan singkat?
-        </DialogTitle>
+        <DialogTitle>Detail Janji Kunjungan</DialogTitle>
         <DialogDescription>
-          (Isi detail dibawah ini untuk kami teruskan ke PIC terkait)
+          Isi nama dan jabatan orang yang Anda hubungi.
         </DialogDescription>
       </DialogHeader>
-      <!-- Step lanjutan jika TIDAK -->
-      <form class="grid gap-4" onsubmit={submitTanpaSurat}>
+
+      <form class="grid gap-4" onsubmit={submitDetailJanji}>
         <div class="grid gap-2">
           <Label for="modal_nama">
             Dengan Siapa <span class="text-red-500">*</span>
