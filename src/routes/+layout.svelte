@@ -21,9 +21,9 @@
         <span class="font-semibold text-slate-800">{data.companyName}</span>
       </div>
       <nav class="hidden md:flex items-center gap-6 text-sm text-slate-600">
-        <a href="/token" class="hover:text-slate-900"
-          >Periksa Pengajuan Kunjungan Tamu</a
-        >
+        <a href="/token" class="hover:text-slate-900">
+          Periksa Pengajuan Kunjungan Tamu
+        </a>
       </nav>
     </div>
   </header>

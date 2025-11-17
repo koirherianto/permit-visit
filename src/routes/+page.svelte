@@ -20,6 +20,7 @@
     DialogDescription,
     DialogFooter,
   } from "$lib/components/ui/dialog/index.js";
+  import { onMount } from "svelte";
 
   import type { PageProps } from "./$types";
   let { data, form }: PageProps = $props();
@@ -57,6 +58,29 @@
     jabatanInginDitemui = jabatanJanji.trim();
     modalOpen = false;
   }
+
+  let minTanggalKunjungan = $state("");
+  let minTanggatSelesai = $state("");
+
+  onMount(() => {
+    const now = new Date();
+
+    // Mulai dari awal hari ini (biar “2 hari setelah hari ini” = 2 hari penuh)
+    now.setHours(0, 0, 0, 0);
+
+    // Tambah 2 hari
+    const d = new Date(now);
+    d.setDate(d.getDate() + 2);
+
+    const yyyy = d.getFullYear();
+    const mm = String(d.getMonth() + 1).padStart(2, "0");
+    const dd = String(d.getDate()).padStart(2, "0");
+    const hh = "00"; // bebas, bisa juga pakai jam tertentu
+    const min = "00";
+
+    minTanggalKunjungan = `${yyyy}-${mm}-${dd}T${hh}:${min}`;
+    minTanggatSelesai = `${yyyy}-${mm}-${dd}`;
+  });
 </script>
 
 <!-- HERO (tetap) -->
@@ -68,8 +92,7 @@
   <div class="absolute inset-0 bg-black/40"></div>
   <div
     class="absolute inset-0 opacity-20 mix-blend-overlay pointer-events-none"
-    style="background-image: radial-gradient(circle at 20% 30%, white 0%, transparent 35%),
-                               radial-gradient(circle at 80% 70%, white 0%, transparent 35%);"
+    style="background-image: radial-gradient(circle at 20% 30%, white 0%, transparent 35%), radial-gradient(circle at 80% 70%, white 0%, transparent 35%);"
   ></div>
   <div
     class="relative z-10 container mx-auto px-4 py-16 md:py-24 flex flex-col items-center text-center text-white"
@@ -85,9 +108,8 @@
       Formulir Kunjungan Tamu
     </h1>
     <p class="mt-4 max-w-2xl mx-auto text-base md:text-lg text-white/90">
-      Silakan isi data kunjungan untuk keperluan administrasi di <span
-        class="font-semibold">{data.companyName}</span
-      >.
+      Silakan isi data kunjungan untuk keperluan administrasi di
+      <span class="font-semibold">{data.companyName}</span>.
     </p>
   </div>
 </section>
@@ -98,10 +120,10 @@
     <CardHeader>
       <CardTitle>Daftar Nama Kunjungan</CardTitle>
       <p class="text-sm text-muted-foreground mt-1">
-        Proses pengajuan izin kunjungan mengikuti SOP perusahaan {data.companyName}.<br
-        />
-        Disarankan mengajukan izin kunjungan minimal 3 hari sebelum jadwal pelaksanaan.<br
-        />
+        Proses pengajuan izin kunjungan mengikuti SOP perusahaan {data.companyName}.
+        <br />
+        Disarankan mengajukan izin kunjungan minimal 3 hari sebelum jadwal pelaksanaan.
+        <br />
       </p>
     </CardHeader>
     <CardContent>
@@ -130,9 +152,9 @@
 
         <!-- Agenda -->
         <div class="grid gap-2">
-          <Label for="agenda"
-            >Keperluan <span class="text-red-500">*</span></Label
-          >
+          <Label for="agenda">
+            Keperluan <span class="text-red-500">*</span>
+          </Label>
           <Input
             id="agenda"
             name="agenda"
@@ -209,9 +231,9 @@
           {/each}
 
           <div class="mt-4">
-            <Button type="button" variant="outline" onclick={tambahTamu}
-              >+ Tambah Tamu Lainnya</Button
-            >
+            <Button type="button" variant="outline" onclick={tambahTamu}>
+              + Tambah Tamu Lainnya
+            </Button>
           </div>
         </div>
 
@@ -220,14 +242,15 @@
         <!-- Tanggal -->
         <div class="grid md:grid-cols-2 gap-4">
           <div class="grid gap-2">
-            <Label for="tanggal_kunjungan"
-              >Tanggal & Waktu Masuk <span class="text-red-500">*</span></Label
-            >
+            <Label for="tanggal_kunjungan">
+              Tanggal & Waktu Masuk <span class="text-red-500">*</span>
+            </Label>
             <Input
               id="tanggal_kunjungan"
               name="tanggal_kunjungan"
               type="datetime-local"
               value={form?.old?.tanggal_kunjungan}
+              min={minTanggalKunjungan}
               required
             />
             {#if form?.errors?.tanggal_kunjungan}
@@ -237,14 +260,15 @@
             {/if}
           </div>
           <div class="grid gap-2">
-            <Label for="tanggal_berakhir"
-              >Tanggal Selesai <span class="text-red-500">*</span></Label
-            >
+            <Label for="tanggal_berakhir">
+              Tanggal Selesai <span class="text-red-500">*</span>
+            </Label>
             <Input
               id="tanggal_berakhir"
               name="tanggal_berakhir"
               value={form?.old?.tanggal_berakhir}
               type="date"
+              min={minTanggatSelesai}
               required
             />
             {#if form?.errors?.tanggal_berakhir}
@@ -260,15 +284,14 @@
           <h3 class="font-semibold mb-2">PIC Yang Ingin Ditemui</h3>
           <div class="grid md:grid-cols-2 gap-4 mb-2">
             <div class="grid gap-2">
-              <Label for="nama_ingin_ditemui"
-                >Nama <span class="text-red-500">*</span></Label
-              >
+              <Label for="nama_ingin_ditemui">
+                Nama <span class="text-red-500">*</span>
+              </Label>
             </div>
             <div class="grid gap-2">
-              <Label for="jabatan_ingin_ditemui"
-                >Jabatan/Bagian/Departemen <span class="text-red-500">*</span
-                ></Label
-              >
+              <Label for="jabatan_ingin_ditemui">
+                Jabatan/Bagian/Departemen <span class="text-red-500">*</span>
+              </Label>
             </div>
           </div>
           <div class="grid md:grid-cols-2 gap-4 my-2">
@@ -362,19 +385,19 @@
       </div>
     {:else if hasOfficialLetter === false}
       <DialogHeader>
-        <DialogTitle
-          >Apakah sudah buat janji via telpon/pesan singkat?</DialogTitle
-        >
-        <DialogDescription
-          >(Isi detail dibawah ini untuk kami teruskan ke PIC terkait)</DialogDescription
-        >
+        <DialogTitle>
+          Apakah sudah buat janji via telpon/pesan singkat?
+        </DialogTitle>
+        <DialogDescription>
+          (Isi detail dibawah ini untuk kami teruskan ke PIC terkait)
+        </DialogDescription>
       </DialogHeader>
       <!-- Step lanjutan jika TIDAK -->
       <form class="grid gap-4" onsubmit={submitTanpaSurat}>
         <div class="grid gap-2">
-          <Label for="modal_nama"
-            >Dengan Siapa <span class="text-red-500">*</span></Label
-          >
+          <Label for="modal_nama">
+            Dengan Siapa <span class="text-red-500">*</span>
+          </Label>
           <Input
             id="modal_nama"
             bind:value={namaJanji}
@@ -385,10 +408,9 @@
         </div>
 
         <div class="grid gap-2">
-          <Label for="modal_jabatan"
-            >Jabatan/Bagian/Departemen <span class="text-red-500">*</span
-            ></Label
-          >
+          <Label for="modal_jabatan">
+            Jabatan/Bagian/Departemen <span class="text-red-500">*</span>
+          </Label>
           <Input
             id="modal_jabatan"
             bind:value={jabatanJanji}
@@ -399,9 +421,6 @@
         </div>
 
         <DialogFooter class="mt-2">
-          <a href="/out">
-            <Button type="button" variant="ghost">Tidak Memiliki janji</Button>
-          </a>
           <Button type="submit">Lanjutkan</Button>
         </DialogFooter>
       </form>
