@@ -121,7 +121,7 @@
       <p class="text-sm text-muted-foreground mt-1">
         Proses pengajuan izin kunjungan mengikuti SOP perusahaan {data.companyName}.
         <br />
-        Disarankan mengajukan izin kunjungan minimal 3 hari sebelum jadwal pelaksanaan.
+        Disarankan mengajukan izin kunjungan minimal 2 hari sebelum jadwal pelaksanaan.
         <br />
       </p>
     </CardHeader>
