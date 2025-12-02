@@ -58,8 +58,62 @@
     modalOpen = false;
   }
 
+  let tanggalKunjungan = $state(form?.old?.tanggal_kunjungan ?? "");
+  let tanggalBerakhir = $state(form?.old?.tanggal_berakhir ?? "");
+
   let minTanggalKunjungan = $state("");
   let minTanggatSelesai = $state("");
+  let baseMinTanggatSelesai = $state("");
+  let maxTanggalBerakhir = $state("");
+
+  function formatDateOnly(date: Date) {
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, "0");
+    const dd = String(date.getDate()).padStart(2, "0");
+    return `${yyyy}-${mm}-${dd}`;
+  }
+
+  function updateEndDateBounds(value: string) {
+    tanggalKunjungan = value;
+
+    if (!value) {
+      maxTanggalBerakhir = "";
+      if (baseMinTanggatSelesai) {
+        minTanggatSelesai = baseMinTanggatSelesai;
+      }
+      return;
+    }
+
+    const start = new Date(value);
+    if (Number.isNaN(start.getTime())) return;
+
+    const startDateOnly = new Date(
+      start.getFullYear(),
+      start.getMonth(),
+      start.getDate()
+    );
+
+    const minDateStr = formatDateOnly(startDateOnly);
+    minTanggatSelesai = minDateStr;
+
+    const maxDate = new Date(startDateOnly);
+    maxDate.setDate(maxDate.getDate() + 7);
+    const maxDateStr = formatDateOnly(maxDate);
+    maxTanggalBerakhir = maxDateStr;
+
+    if (tanggalBerakhir) {
+      const [yyyy, mm, dd] = tanggalBerakhir.split("-").map(Number);
+      const endDate = yyyy && mm && dd ? new Date(yyyy, mm - 1, dd) : undefined;
+
+      if (endDate instanceof Date && !Number.isNaN(endDate.getTime())) {
+        if (endDate < startDateOnly) {
+          tanggalBerakhir = minDateStr;
+        } else if (endDate > maxDate) {
+          tanggalBerakhir = maxDateStr;
+        }
+      }
+    }
+  }
 
   onMount(() => {
     const now = new Date();
@@ -79,6 +133,11 @@
 
     minTanggalKunjungan = `${yyyy}-${mm}-${dd}T${hh}:${min}`;
     minTanggatSelesai = `${yyyy}-${mm}-${dd}`;
+    baseMinTanggatSelesai = `${yyyy}-${mm}-${dd}`;
+
+    if (tanggalKunjungan) {
+      updateEndDateBounds(tanggalKunjungan);
+    }
   });
 </script>
 
@@ -248,8 +307,10 @@
               id="tanggal_kunjungan"
               name="tanggal_kunjungan"
               type="datetime-local"
-              value={form?.old?.tanggal_kunjungan}
+              bind:value={tanggalKunjungan}
               min={minTanggalKunjungan}
+              onchange={(event) =>
+                updateEndDateBounds(event.currentTarget.value)}
               required
             />
             {#if form?.errors?.tanggal_kunjungan}
@@ -265,9 +326,10 @@
             <Input
               id="tanggal_berakhir"
               name="tanggal_berakhir"
-              value={form?.old?.tanggal_berakhir}
+              bind:value={tanggalBerakhir}
               type="date"
               min={minTanggatSelesai}
+              max={maxTanggalBerakhir}
               required
             />
             {#if form?.errors?.tanggal_berakhir}
