@@ -449,10 +449,14 @@
         <Button onclick={pilihSudahJanji} class="bg-teal-600">Sudah</Button>
       </div>
       <!-- hilight stabilo warna kuning -->
-      <DialogDescription class="text-yellow-500"
-        >Mulai dari tanggal 29 Desember 2025, pengajuan kunjungan minimal 3 hari
-        sebelum jadwal pelaksanaan.</DialogDescription
-      >
+      <DialogDescription class="text-dark">
+        Mulai dari tanggal
+        <span class="bg-yellow-300/60 px-1 rounded-sm">
+          29 Desember 2025
+        </span>, pengajuan kunjungan minimal
+        <span class="bg-yellow-300/60 px-1 rounded-sm"> 3 hari </span>
+        sebelum jadwal pelaksanaan.
+      </DialogDescription>
     {:else if visitType === "janji"}
       <DialogHeader>
         <DialogTitle>Detail Janji Kunjungan</DialogTitle>
