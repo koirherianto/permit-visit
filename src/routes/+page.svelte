@@ -97,7 +97,7 @@
     minTanggatSelesai = minDateStr;
 
     const maxDate = new Date(startDateOnly);
-    maxDate.setDate(maxDate.getDate() + 7);
+    maxDate.setDate(maxDate.getDate() + 30);
     const maxDateStr = formatDateOnly(maxDate);
     maxTanggalBerakhir = maxDateStr;
 
