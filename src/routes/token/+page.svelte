@@ -39,7 +39,7 @@
             id="token"
             name="token"
             bind:value={token}
-            placeholder="Token Dikirim Melalai Whatsapp"
+            placeholder="Token Dikirim Melalui Whatsapp"
             maxlength={11}
             required
           />

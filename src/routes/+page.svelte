@@ -449,13 +449,18 @@
         <Button onclick={pilihSudahJanji} class="bg-teal-600">Sudah</Button>
       </div>
       <!-- hilight stabilo warna kuning -->
-      <DialogDescription class="text-dark">
-        Mulai dari tanggal
-        <span class="bg-yellow-300/60 px-1 rounded-sm">
-          29 Desember 2025
-        </span>, pengajuan kunjungan minimal
-        <span class="bg-yellow-300/60 px-1 rounded-sm"> 3 hari </span>
-        sebelum jadwal pelaksanaan.
+      <DialogDescription class="text-dark space-y-2">
+        <p>
+          Pengajuan kunjungan minimal
+          <span class="bg-yellow-300/60 px-1 rounded-sm"> 3 hari </span>
+          sebelum jadwal pelaksanaan.
+        </p>
+        <p>
+          Ingin cek progres approval?
+          <a href="/token" class="font-semibold text-teal-700 hover:underline">
+            Lihat status kunjungan di sini
+          </a>.
+        </p>
       </DialogDescription>
     {:else if visitType === "janji"}
       <DialogHeader>
